@@ -66,12 +66,12 @@ vars:
     mongo_admin_user: admin
     mongodb_security_authorization: 'enabled'
 
-mongodb_users:
-   - name: "user1"
-     database: "database1"
-     password: "ChangeIT!"
-     roles:
-       - readWrite
+    mongodb_users:
+        - name: "user1"
+          database: "database1"
+          password: "ChangeIT!"
+          roles:
+            - readWrite
 ```
 ## Installation
 ```
