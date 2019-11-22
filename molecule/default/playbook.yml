@@ -12,8 +12,8 @@
     mongodb_security_authorization: 'enabled'
 
   mongodb_users:
-   - name: "user1"
-     database: "database1"
-     password: "ChangeIT!"
-     roles:
-       - readWrite
+    - name: "user1"
+      database: "database1"
+      password: "ChangeIT!"
+      roles:
+        - readWrite
