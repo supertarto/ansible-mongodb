@@ -7,6 +7,7 @@
 - name: Add APT repository for MongoDB
   apt_repository:
     repo: "{{ mongodb_apt_repository }}"
+    filename: mongodb_rep
     state: present
     update_cache: true
 
