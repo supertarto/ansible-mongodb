@@ -1,2 +1,34 @@
 ---
+- name: Include OS specific variables
+  include_vars: "{{ ansible_os_family }}.yml"
 
+- name: Define mongodb_apt_keyserver
+  set_fact:
+    mongodb_apt_keyserver: "{{ __mongodb_apt_keyserver }}"
+  when: mongodb_apt_keyserver is not defined
+
+- name: Define mongodb_apt_repository
+  set_fact:
+    mongodb_apt_repository: "{{ __mongodb_apt_repository }}"
+  when: mongodb_apt_repository is not defined
+
+- name: mongodb_package_name
+  set_fact:
+    mongodb_package_name: "{{ __mongodb_package_name }}"
+  when: mongodb_package_name is not defined
+
+- name: Install requirements for pymongo
+  package:
+    name: ["python-pip", "python-setuptools", "ca-certificates"]
+    state: present
+  when: mongodb_use_pymongo
+
+- name: Install pymongo
+  pip:
+    name: pymongo
+    state: present
+  when: mongodb_use_pymongo
+
+- include_tasks: "setup-{{ ansible_os_family }}.yml"
+
+- include_tasks: "configure.yml"

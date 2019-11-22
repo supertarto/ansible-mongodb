@@ -1,0 +1,28 @@
+---
+- name: Add APT key for MongoDB
+  apt_key:
+    url: "{{ mongodb_apt_keyserver }}"
+    state: present
+
+- name: Add APT repository for MongoDB
+  apt_repository:
+    repo: "{{ mongodb_apt_repository }}"
+    state: present
+    update_cache: true
+
+- name: Installation de Mongodb
+  package:
+    name: "{{ mongodb_package_name }}"
+    state: present
+
+- name: Hold MongoDB version (Debian)
+  dpkg_selections:
+    name: "{{ mongodb_package_name }}"
+    selection: "hold"
+  when: mongodb_version_lock
+
+- name: Enable mongodb service on boot
+  service:
+    name: mongodb
+    state: started
+    enabled: true
