@@ -1,6 +1,6 @@
 ---
 - name: Restart MongoDB
   service:
-    name: mongodb
+    name: mongod
     state: restarted
     enabled: true
