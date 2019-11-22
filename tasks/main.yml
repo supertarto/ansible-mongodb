@@ -17,6 +17,11 @@
     mongodb_package_name: "{{ __mongodb_package_name }}"
   when: mongodb_package_name is not defined
 
+- name: mongodb_daemon_name
+  set_fact:
+    mongodb_daemon_name: "{{ __mongodb_daemon_name }}"
+  when: mongodb_daemon_name is not defined
+
 - name: Install requirements for pymongo
   package:
     name: ["python-pip", "python-setuptools", "ca-certificates"]

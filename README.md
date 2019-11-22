@@ -53,6 +53,13 @@ mongodb_net_port: "27017"
 mongodb_net_bind_ip: "127.0.0.1"
 mongodb_security_authorization: "enabled"
 ```
+OS specific variables. 
+```yml
+mongodb_daemon_name: mongodb
+mongodb_package_name: mongodb-server
+mongodb_apt_keyserver: "https://www.mongodb.org/static/pgp/server-{{ mongodb_version }}.asc"
+mongodb_apt_repository: "deb http://repo.mongodb.org/apt/debian {{ ansible_distribution_release }}/mongodb-org/{{ mongodb_version }} main"
+```
 ## Examples
 ```yml
 hosts: all

@@ -24,6 +24,6 @@
 
 - name: Enable mongodb service on boot
   service:
-    name: mongod
+    name: "{{ mongodb_daemon_name }}"
     state: started
     enabled: true

@@ -1,6 +1,6 @@
 ---
 - name: Restart MongoDB
   service:
-    name: mongod
+    name: "{{ mongodb_daemon_name }}"
     state: restarted
     enabled: true
