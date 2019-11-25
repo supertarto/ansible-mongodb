@@ -1,7 +1,7 @@
 ---
 - name: Reload systemd
   systemd:
-    daemon_reload: yes
+    daemon_reload: true
   when: ansible_service_mgr == "systemd" and mongodb_manage_service
 
 - name: Restart MongoDB
