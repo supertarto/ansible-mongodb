@@ -7,7 +7,6 @@
   when: mongodb_security_authorization == 'enabled'
   no_log: true
 
-
 - name: Create admin account if absent
   mongodb_user:
     database: admin
@@ -20,7 +19,7 @@
   when: ( mongodb_security_authorization == 'enabled' and mongodb_user_admin_check.rc != 0 )
   notify: Restart MongoDB
 
-- name: Créate users and databases
+- name: Create users and databases
   mongodb_user:
     database: "{{ item.database }}"
     name: "{{ item.name }}"

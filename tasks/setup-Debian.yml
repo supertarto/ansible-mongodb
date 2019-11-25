@@ -22,13 +22,23 @@
     selection: "hold"
   when: mongodb_version_lock
 
-- name: Copy mongodb.service
-  template:
-    src: mongodb.service.j2
-    dest: "/etc/systemd/system/{{ mongodb_daemon_name }}.service"
+- name: Add systemd configuration if present
+  copy:
+    src: mongodb.service 
+    dest: "/lib/systemd/system/{{ mongodb_daemon_name }}.service"
     owner: root
     group: root
     mode: "0644"
+  when: ansible_service_mgr == "systemd"
+  notify: Reload systemd
+
+- name: Add symlink for systemd
+  file:
+    src: "/lib/systemd/system/{{ mongodb_daemon_name }}.service"
+    dest: "/etc/systemd/system/multi-user.target.wants/{{ mongodb_daemon_name }}.service"
+    state: link
+  when: ansible_service_mgr == "systemd"
+  notify: Reload systemd
 
 - name: Enable mongodb service on boot
   service:
