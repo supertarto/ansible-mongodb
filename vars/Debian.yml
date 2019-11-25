@@ -1,5 +1,5 @@
 ---
-__mongodb_daemon_name: mongodb
-__mongodb_package_name: mongodb-server
+__mongodb_daemon_name: mongod
+__mongodb_package_name: mongodb-org
 __mongodb_apt_keyserver: "https://www.mongodb.org/static/pgp/server-{{ mongodb_version }}.asc"
 __mongodb_apt_repository: "deb http://repo.mongodb.org/apt/debian {{ ansible_distribution_release }}/mongodb-org/{{ mongodb_version }} main"
