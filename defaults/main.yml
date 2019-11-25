@@ -4,15 +4,21 @@ mongodb_use_pymongo: true
 mongodb_version: "4.2"
 mongodb_version_lock: true
 
+mongodb_package_name: mongodb-org
+mongodb_daemon_name: "{{ 'mongod' if ('mongodb-org' in mongodb_package) else 'mongodb' }}"
 
 mongodb_security_authorization: "enabled"
 
+mongodb_system_user: mongodb
 mongo_admin_user: "admin"
 mongo_admin_pass: "ChangeIT!"
 
 mongodb_user_update_password: "on_create"
 mongo_admin_roles: "userAdminAnyDatabase"
 mongodb_login_host: "localhost"
+
+mongodb_net_bindip: 127.0.0.1 
+mongodb_net_port: 27017
 
 mongodb_users: []
 # Exemples

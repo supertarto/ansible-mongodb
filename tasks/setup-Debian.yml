@@ -1,12 +1,17 @@
 ---
+- name: Establish some role-related facts
+  set_fact:
+    mongodb_major_version: "{{ mongodb_version[0:3] }}"
+
 - name: Add APT key for MongoDB
   apt_key:
-    url: "{{ mongodb_apt_keyserver }}"
-    state: present
+    keyserver: "{{ mongodb_apt_keyserver }}"
+    id: "{{ mongodb_apt_key_id[mongodb_major_version] }}"
+  when: mongodb_package == 'mongodb-org'
 
 - name: Add APT repository for MongoDB
   apt_repository:
-    repo: "{{ mongodb_apt_repository }}"
+    repo: "{{ mongodb_repository[mongodb_major_version] }}"
     filename: mongodb_rep
     state: present
     update_cache: true
@@ -15,6 +20,7 @@
   package:
     name: "{{ mongodb_package_name }}"
     state: present
+    update_cache: true
 
 - name: Hold MongoDB version (Debian)
   dpkg_selections:

@@ -1,5 +1,13 @@
 ---
-__mongodb_daemon_name: mongodb
-__mongodb_package_name: mongodb-org
-__mongodb_apt_keyserver: "https://www.mongodb.org/static/pgp/server-{{ mongodb_version }}.asc"
-__mongodb_apt_repository: "deb http://repo.mongodb.org/apt/debian {{ ansible_distribution_release }}/mongodb-org/{{ mongodb_version }} main"
+mongodb_repository:
+  "3.4": "deb http://repo.mongodb.org/apt/debian {{ ansible_distribution_release }}/mongodb-org/3.4 main"
+  "3.6": "deb http://repo.mongodb.org/apt/debian {{ ansible_distribution_release }}/mongodb-org/3.6 main"
+  "4.0": "deb http://repo.mongodb.org/apt/debian {{ ansible_distribution_release }}/mongodb-org/4.0 main"
+  "4.2": "deb http://repo.mongodb.org/apt/debian {{ ansible_distribution_release }}/mongodb-org/4.2 main"
+
+mongodb_apt_keyserver: keyserver.ubuntu.com
+mongodb_apt_key_id:
+  "3.4": "0C49F3730359A14518585931BC711F9BA15703C6"
+  "3.6": "2930ADAE8CAF5059EE73BB4B58712A2291FA4AD5"
+  "4.0": "9DA31620334BD75D9DCB49F368818C72E52529D4"
+  "4.2": "E162F504A20CDF15827F718D4B7C549A058F8B6B"

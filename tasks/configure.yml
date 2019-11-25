@@ -1,4 +1,57 @@
 ---
+- name: create mongodb group
+  group:
+    name: "{{ mongodb_system_user }}"
+    state: present
+
+- name: create mongodb user
+  user:
+    name: "{{ mongodb_system_user }}"
+    group: "{{ mongodb_system_user }}"
+    state: present
+
+- name: Create log dir if missing
+  file:
+    state: directory
+    recurse: true
+    dest: "{{ mongodb_systemlog_path|dirname }}"
+    owner: "{{ mongodb_system_user }}"
+    group: "{{ mongodb_system_user }}"
+    mode: "0755"
+  when: mongodb_systemlog_destination == "file"
+
+- name: Check that logfile exists
+  stat:
+    path: "{{ mongodb_systemlog_path }}"
+  register: logfile_stat
+  when: mongodb_systemlog_destination == "file"
+
+- name: Create log if missing
+  file:
+    state: touch
+    dest: "{{ mongodb_systemlog_path }}"
+    owner: "{{ mongodb_system_user }}"
+    group: "{{ mongodb_system_user }}"
+    mode: "0755"
+  when: ( mongodb_systemlog_destination == "file"
+        and logfile_stat is defined
+        and not logfile_stat.stat.exists )
+
+- name: Copy mongod.conf
+  template:
+    src: mongod.conf.j2
+    dest: /etc/mongod.conf
+    owner: root
+    group: root
+    mode: "0644"
+  notify: 
+    - Restart MongoDB
+    - Service started
+    - Wait for mongodb to start
+
+- name: Flush all handlers at this point
+  meta: flush_handlers
+
 - name: Check if admin user already exists
   command: mongo --quiet -u {{ mongodb_admin_user }} -p{{ mongodb_admin_pass }} --eval 'db.version()' admin
   register: mongodb_user_admin_check
@@ -33,9 +86,3 @@
     - "{{ mongodb_users | default([]) }}"
   when: mongodb_security_authorization == 'enabled'
   no_log: true
-
-- name: Copy mongod.conf
-  template:
-    src: mongod.conf.j2
-    dest: /etc/mongod.conf
-  notify: Restart MongoDB
