@@ -17,9 +17,6 @@ mongodb_user_update_password: "on_create"
 mongo_admin_roles: "userAdminAnyDatabase"
 mongodb_login_host: "localhost"
 
-mongodb_net_bindip: 127.0.0.1 
-mongodb_net_port: 27017
-
 mongodb_users: []
 # Exemples
 #  - name: "User1"
