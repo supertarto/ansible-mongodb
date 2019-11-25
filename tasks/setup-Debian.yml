@@ -18,13 +18,13 @@
 
 - name: Installation de Mongodb
   package:
-    name: "{{ mongodb_package_name }}"
+    name: "{{ mongodb_package }}"
     state: present
     update_cache: true
 
 - name: Hold MongoDB version (Debian)
   dpkg_selections:
-    name: "{{ mongodb_package_name }}"
+    name: "{{ mongodb_package }}"
     selection: "hold"
   when: mongodb_version_lock
 
