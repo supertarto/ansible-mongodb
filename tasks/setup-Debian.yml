@@ -45,9 +45,3 @@
     state: link
   when: ansible_service_mgr == "systemd"
   notify: Reload systemd
-
-- name: Enable mongodb service on boot
-  service:
-    name: "{{ mongodb_daemon_name }}"
-    state: started
-    enabled: true
