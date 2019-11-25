@@ -4,7 +4,7 @@ mongodb_use_pymongo: true
 mongodb_version: "4.2"
 mongodb_version_lock: true
 
-mongodb_package_name: mongodb-org
+mongodb_package: mongodb-org
 mongodb_daemon_name: "{{ 'mongod' if ('mongodb-org' in mongodb_package) else 'mongodb' }}"
 
 mongodb_security_authorization: "enabled"
