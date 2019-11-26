@@ -1,12 +1,28 @@
 ---
+- name: Create mongodb group
+  group:
+    name: "{{ mongodb_system_group }}"
+    state: present
+    system: true
+
+- name: create mongodb user
+  user:
+    name: "{{ mongodb_system_user }}"
+    group: "{{ mongodb_system_group }}"
+    system: true
+    creat_home: false
+    state: present
+
+# Workaround because default(omit) is not working. At least in Ansible 2.8.
+
 - name: Create log dir if missing
   file:
     state: directory
     recurse: true
     dest: "{{ mongodb_systemlog_path|dirname }}"
     owner: "{{ mongodb_system_user }}"
-    group: "{{ mongodb_system_user }}"
-    mode: "0755"
+    group: "{{ mongodb_system_group }}"
+    mode: 0755
   when: mongodb_systemlog_destination == "file"
 
 - name: Check that logfile exists
@@ -20,58 +36,24 @@
     state: touch
     dest: "{{ mongodb_systemlog_path }}"
     owner: "{{ mongodb_system_user }}"
-    group: "{{ mongodb_system_user }}"
-    mode: "0755"
+    group: "{{ mongodb_system_group }}"
+    mode: 0755
   when: ( mongodb_systemlog_destination == "file"
         and logfile_stat is defined
         and not logfile_stat.stat.exists )
 
-- name: Copy mongod.conf
+- name: Configure mongodb
   template:
     src: mongod.conf.j2
-    dest: "{{ mongodb_conf_path }}"
+    dest: /etc/mongod.conf
+    backup: true
     owner: root
     group: root
-    mode: "0644"
+    mode: 0644
   notify:
+    - Restart mongodb
     - Service started
-    - Restart MongoDB
     - Wait for mongodb to start
 
-- name: Flush all handlers at this point
+- name: Flush all handlers
   meta: flush_handlers
-
-- name: Check if admin user already exists
-  command: mongo --quiet -u {{ mongodb_admin_user }} -p{{ mongodb_admin_pass }} --eval 'db.version()' admin
-  register: mongodb_user_admin_check
-  changed_when: false
-  ignore_errors: true
-  when: mongodb_security_authorization == 'enabled'
-  no_log: true
-
-- name: Create admin account if absent
-  mongodb_user:
-    database: admin
-    name: "{{ mongo_admin_user }}"
-    password: "{{ mongo_admin_pass }}"
-    update_password: "{{ mongodb_user_update_password }}"
-    roles: "{{ mongo_admin_roles }}"
-    state: present
-    login_host: "{{ mongodb_login_host }}"
-  when: ( mongodb_security_authorization == 'enabled' and mongodb_user_admin_check.rc != 0 )
-  notify: Restart MongoDB
-
-- name: Create users and databases
-  mongodb_user:
-    database: "{{ item.database }}"
-    name: "{{ item.name }}"
-    password: "{{ item.password }}"
-    update_password: "{{ mongodb_user_update_password }}"
-    roles: "{{ item.roles }}"
-    login_user: "{{ mongo_admin_user }}"
-    login_password: "{{ mongo_admin_pass }}"
-    login_host: "{{ mongodb_login_host }}"
-  with_items:
-    - "{{ mongodb_users | default([]) }}"
-  when: mongodb_security_authorization == 'enabled'
-  no_log: true

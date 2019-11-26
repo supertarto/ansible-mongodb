@@ -1,13 +1,22 @@
 ---
-- name: Establish some role-related facts
+- name: Determine major version
   set_fact:
     mongodb_major_version: "{{ mongodb_version[0:3] }}"
 
-- name: Add APT key for MongoDB
+- name: Install Requisites
+  package:
+    name: ["python-pip", "ca-certificates", "python-setuptools"]
+    state: present
+
+- name: Install PyMongo from PIP
+  pip:
+    name: pymongo
+    state: "present"
+
+- name: Add APT key
   apt_key:
     keyserver: "{{ mongodb_apt_keyserver }}"
     id: "{{ mongodb_apt_key_id[mongodb_major_version] }}"
-  when: mongodb_package == 'mongodb-org'
 
 - name: Add APT repository for MongoDB
   apt_repository:
@@ -16,9 +25,9 @@
     state: present
     update_cache: true
 
-- name: Installation de Mongodb
+- name: Install MongoDB package
   package:
-    name: "{{ mongodb_package }}"
+    name: "{{ mongodb_package }}{% if (mongodb_version | length > 3) %}={{ mongodb_version }}{% endif %}"
     state: present
     update_cache: true
 
@@ -33,29 +42,19 @@
     selection: "hold"
   when: mongodb_version_lock
 
-- name: Copy Mongodb init script into place.
-  template:
-    src: mongodb.init.j2
-    dest: "/etc/init.d/{{ mongodb_daemon_name }}"
-    owner: root
-    group: root
-    mode: 0755
-  when: "ansible_service_mgr != 'systemd'"
-
 - name: Add systemd configuration if present
-  template:
-    src: mongodb.service.j2
-    dest: "/lib/systemd/system/{{ mongodb_daemon_name }}.service"
+  copy:
+    src: "mongodb.service dest=/lib/systemd/system/{{ mongodb_daemon_name }}.service"
     owner: root
     group: root
-    mode: "0644"
-  when: "ansible_service_mgr == 'systemd'"
+    mode: 0644
+  when: ansible_service_mgr == "systemd"
   notify: Reload systemd
 
 - name: Add symlink for systemd
   file:
-    src: "/lib/systemd/system/{{ mongodb_daemon_name }}.service"
-    dest: "/etc/systemd/system/multi-user.target.wants/{{ mongodb_daemon_name }}.service"
+    src: /lib/systemd/system/{{ mongodb_daemon_name }}.service
+    dest: /etc/systemd/system/multi-user.target.wants/{{ mongodb_daemon_name }}.service
     state: link
-  when: "ansible_service_mgr == 'systemd'"
+  when: ansible_service_mgr == "systemd"
   notify: Reload systemd
