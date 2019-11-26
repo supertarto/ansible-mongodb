@@ -48,7 +48,7 @@ start()
 stop()
 {
   echo -n $"Stopping {{ mongodb_daemon_name }}: "
-  killproc -p "$PIDFILE" -d 300 /usr/bin/{{ mongodb_daemon_name }}
+  killproc -p "$PIDFILE" -d 300 /usr/bin/mongod
   RETVAL=$?
   echo
   [ $RETVAL -eq 0 ] && rm -f /var/lock/subsys/{{ mongodb_daemon_name }}
