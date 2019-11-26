@@ -22,20 +22,34 @@
     state: present
     update_cache: true
 
+- name: Install numactl package
+  package:
+    name: numactl
+    state: present
+
 - name: Hold MongoDB version (Debian)
   dpkg_selections:
     name: "{{ mongodb_package }}"
     selection: "hold"
   when: mongodb_version_lock
 
+- name: Copy Mongodb init script into place.
+  template:
+    src: mongodb.init.j2
+    dest: "/etc/init.d/{{ mongodb_daemon_name }}"
+    owner: root
+    group: root
+    mode: 0755
+  when: "ansible_service_mgr != 'systemd'"
+
 - name: Add systemd configuration if present
-  copy:
-    src: mongodb.service
+  template:
+    src: mongodb.service.j2
     dest: "/lib/systemd/system/{{ mongodb_daemon_name }}.service"
     owner: root
     group: root
     mode: "0644"
-  when: ansible_os_family == 'Debian'
+  when: "ansible_service_mgr == 'systemd'"
   notify: Reload systemd
 
 - name: Add symlink for systemd
@@ -43,5 +57,5 @@
     src: "/lib/systemd/system/{{ mongodb_daemon_name }}.service"
     dest: "/etc/systemd/system/multi-user.target.wants/{{ mongodb_daemon_name }}.service"
     state: link
-  when: ansible_os_family == 'Debian'
+  when: "ansible_service_mgr == 'systemd'"
   notify: Reload systemd

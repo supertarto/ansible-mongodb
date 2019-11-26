@@ -1,15 +1,4 @@
 ---
-- name: create mongodb group
-  group:
-    name: "{{ mongodb_system_user }}"
-    state: present
-
-- name: create mongodb user
-  user:
-    name: "{{ mongodb_system_user }}"
-    group: "{{ mongodb_system_user }}"
-    state: present
-
 - name: Create log dir if missing
   file:
     state: directory
@@ -40,7 +29,7 @@
 - name: Copy mongod.conf
   template:
     src: mongod.conf.j2
-    dest: /etc/mongod.conf
+    dest: "{{ mongodb_conf_path }}"
     owner: root
     group: root
     mode: "0644"

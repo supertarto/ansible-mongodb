@@ -2,6 +2,20 @@
 - name: Include OS specific variables
   include_vars: "{{ ansible_os_family }}.yml"
 
+- name: create mongodb group
+  group:
+    name: "{{ mongodb_system_group }}"
+    system: true
+    state: present
+
+- name: create mongodb user
+  user:
+    name: "{{mongodb_system_user }}"
+    create_home: false
+    system: true
+    group: "{{ mongodb_system_group }}"
+    state: present
+
 - name: Install requirements for pymongo
   package:
     name: ["python-pip", "python-setuptools", "ca-certificates"]

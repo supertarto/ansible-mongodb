@@ -5,11 +5,12 @@ mongodb_version: "4.2"
 mongodb_version_lock: true
 
 mongodb_package: mongodb-org
-mongodb_daemon_name: "{{ 'mongod' if ('mongodb-org' in mongodb_package) else 'mongodb' }}"
+mongodb_daemon_name: "mongodb"
 
 mongodb_security_authorization: "enabled"
 
 mongodb_system_user: mongodb
+mongodb_system_group: mongodb
 mongo_admin_user: "admin"
 mongo_admin_pass: "ChangeIT!"
 
@@ -24,8 +25,9 @@ mongodb_users: []
 #    password: "ChangeIT!"
 #    roles:
 #      - readWrite
-
+mongodb_conf_path: /etc/mongod.conf
 mongodb_db_path: "/var/lib/mongodb"
+mongodb_pid_path: /var/run/mongodb/mongod.pid
 mongodb_journal_enabled: true
 mongodb_systemlog_path: "/var/log/mongodb/mongod.log"
 mongodb_systemlog_destination: "file"
