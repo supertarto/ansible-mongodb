@@ -13,7 +13,7 @@
     mongo --quiet -u {{ mongodb_user_admin_name }} -p {{ mongodb_user_admin_password }} --port {{ mongodb_net_port }} --eval 'db.version()' admin
   register: mongodb_user_admin_check
   changed_when: false
-  check_mode: no
+  check_mode: false
   ignore_errors: true
   when: mongodb_security_authorization == 'enabled'
   no_log: true
