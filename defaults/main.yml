@@ -5,7 +5,7 @@ mongodb_version: "4.2"
 mongodb_version_lock: true
 
 mongodb_package: mongodb-org
-mongodb_daemon_name: "mongodb"
+mongodb_daemon_name: "mongod"
 
 mongodb_security_authorization: "enabled"
 
