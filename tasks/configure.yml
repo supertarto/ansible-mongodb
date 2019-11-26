@@ -34,8 +34,8 @@
     group: root
     mode: "0644"
   notify:
-    - Restart MongoDB
     - Service started
+    - Restart MongoDB
     - Wait for mongodb to start
 
 - name: Flush all handlers at this point
