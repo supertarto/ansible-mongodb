@@ -10,7 +10,7 @@
 
 - name: create mongodb user
   user:
-    name: "{{mongodb_system_user }}"
+    name: "{{ mongodb_system_user }}"
     create_home: false
     system: true
     group: "{{ mongodb_system_group }}"
