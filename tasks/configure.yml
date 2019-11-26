@@ -10,7 +10,7 @@
     name: "{{ mongodb_system_user }}"
     group: "{{ mongodb_system_group }}"
     system: true
-    creat_home: false
+    create_home: false
     state: present
 
 # Workaround because default(omit) is not working. At least in Ansible 2.8.
