@@ -44,7 +44,8 @@
 
 - name: Add systemd configuration if present
   copy:
-    src: "mongodb.service dest=/lib/systemd/system/{{ mongodb_daemon_name }}.service"
+    src: "mongodb.service"
+    dest: "/lib/systemd/system/{{ mongodb_daemon_name }}.service"
     owner: root
     group: root
     mode: 0644
