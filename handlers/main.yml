@@ -19,4 +19,4 @@
     host: "{{ item }}"
     port: "{{ mongodb_net_port }}"
     timeout: 120
-  with_items: "{{ mongodb_net_bindip.split(',') | map('replace', '0.0.0.0', '127.0.0.1') | list }}"
+  with_items: "{{ mongodb_net_bind_ip.split(',') | map('replace', '0.0.0.0', '127.0.0.1') | list }}"
