@@ -50,9 +50,7 @@
     owner: root
     group: root
     mode: 0644
-  notify:
-    - Restart mongodb
-    - Service started
+  notify: Restart mongodb
 
 - name: Flush all handlers
   meta: flush_handlers

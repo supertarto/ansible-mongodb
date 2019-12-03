@@ -10,7 +10,7 @@
 
 - name: Check if admin user already exists
   command: >
-    mongo --quiet -u {{ mongodb_user_admin_name }} -p {{ mongodb_user_admin_password }} --port {{ mongodb_net_port }} --eval 'db.version()' admin
+    mongo --quiet -u {{ mongo_admin_user }} -p {{ mongo_admin_pass }} --port {{ mongodb_net_port }} --eval 'db.version()' admin
   register: mongodb_user_admin_check
   changed_when: false
   check_mode: false
