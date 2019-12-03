@@ -18,8 +18,6 @@
   when: mongodb_security_authorization == 'enabled'
   no_log: true
 
-- debug: var=mongodb_user_admin_check
-
 - name: Ajout d'un compte admin
   mongodb_user:
     database: admin
@@ -28,7 +26,6 @@
     update_password: "{{ mongodb_user_update_password }}"
     roles: "{{ mongo_admin_roles }}"
     state: present
-    login_port: "{{ mongodb_net_port }}"
   when: ( mongodb_security_authorization == 'enabled'
           and mongodb_user_admin_check.rc != 0 )
 
