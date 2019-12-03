@@ -27,7 +27,8 @@
     roles: "{{ mongo_admin_roles }}"
     state: present
     login_port: "{{ mongodb_net_port }}"
-  when: ( mongodb_security_authorization == 'enabled' and mongodb_user_admin_check.rc is not 0 )
+  when: ( mongodb_security_authorization == 'enabled'
+          and mongodb_user_admin_check.rc != 0 )
 
 - name: Create normal users and databases
   mongodb_user:
