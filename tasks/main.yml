@@ -18,6 +18,8 @@
   when: mongodb_security_authorization == 'enabled'
   no_log: true
 
+- debug: var=mongodb_user_admin_check
+
 - name: Ajout d'un compte admin
   mongodb_user:
     database: admin
