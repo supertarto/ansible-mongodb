@@ -25,6 +25,8 @@
     password: "{{ mongo_admin_pass }}"
     update_password: "{{ mongodb_user_update_password }}"
     roles: "{{ mongo_admin_roles }}"
+    login_port: "{{ mongodb_net_port }}"
+    login_host: "{{ mongodb_login_host|default('localhost') }}"    
     state: present
   when: ( mongodb_security_authorization == 'enabled'
           and mongodb_user_admin_check.rc != 0 )

@@ -10,6 +10,7 @@
     mongo_admin_pass: "ChangeIT!"
     mongo_admin_user: admin
     mongodb_security_authorization: 'enabled'
+    mongodb_login_host: 127.0.0.1
 
     mongodb_users:
       - name: "user1"
