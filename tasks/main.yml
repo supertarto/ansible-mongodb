@@ -8,7 +8,7 @@
 - name: Include configuration.yml
   include: configure.yml
 
-- name: Check where admin user already exists
+- name: Check if admin user already exists
   command: >
     mongo --quiet -u {{ mongodb_user_admin_name }} -p {{ mongodb_user_admin_password }} --port {{ mongodb_net_port }} --eval 'db.version()' admin
   register: mongodb_user_admin_check
@@ -27,7 +27,7 @@
     roles: "{{ mongo_admin_roles }}"
     state: present
     login_port: "{{ mongodb_net_port }}"
-  when: ( mongodb_security_authorization == 'enabled' and mongodb_user_admin_check.rc != 0 )
+  when: ( mongodb_security_authorization == 'enabled' and mongodb_user_admin_check.rc is not 0 )
 
 - name: Create normal users and databases
   mongodb_user:
