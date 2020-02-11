@@ -7,7 +7,6 @@ Install and configure mongodb with Ansible. This role is designed for my small n
 None
 
 ## Tested plateform
-* Debian 9 (Stretch)
 * Debian 10 (Buster)
 
 ## Role variables
