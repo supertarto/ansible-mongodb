@@ -18,4 +18,3 @@
         password: "ChangeIT!"
         roles:
           - readWrite
-
