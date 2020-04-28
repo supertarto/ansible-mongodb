@@ -1,7 +1,7 @@
 # Ansible MongoDB
 [![Build Status](https://travis-ci.org/supertarto/ansible-mongodb.svg?branch=master)](https://travis-ci.org/supertarto/ansible-mongodb)
 
-Install and configure mongodb with Ansible. This role is designed for my small need, it can be improved and don't use everything Mongodb can propose.
+Install and configure mongodb with Ansible. This role is designed for my small need, it can be improved and don't use everything Mongodb can propose. Tested only with Debian 10 and mongodb 4.2.
 
 ## Requirements
 None
@@ -10,16 +10,12 @@ None
 * Debian 10 (Buster)
 
 ## Role variables
-Define if we use PyMongo.
-```yml
-mongodb_use_pymongo: true
-```
 Define MongoDB version and if we must hold the mongodb package. 
 ```yml
 mongodb_version: "4.2"
 mongodb_version_lock: true
 ```
-MongoDB Admin user login, password and role.
+MongoDB Admin user login, password and role. Only one admin is possible with this role. TODO: Adapt it to allow multiple admin/roles
 ```yml
 mongo_admin_user: "admin"
 mongo_admin_pass: "ChangeIT!"
@@ -54,10 +50,12 @@ mongodb_security_authorization: "enabled"
 ```
 OS specific variables. 
 ```yml
-mongodb_daemon_name: mongodb
-mongodb_package_name: mongodb-server
-mongodb_apt_keyserver: "https://www.mongodb.org/static/pgp/server-{{ mongodb_version }}.asc"
-mongodb_apt_repository: "deb http://repo.mongodb.org/apt/debian {{ ansible_distribution_release }}/mongodb-org/{{ mongodb_version }} main"
+mongodb_repository: "deb http://repo.mongodb.org/apt/debian {{ ansible_distribution_release }}/mongodb-org/{{ mongodb_version }} main"
+mongodb_apt_keyserver: keyserver.ubuntu.com
+mongodb_apt_key_id: "E162F504A20CDF15827F718D4B7C549A058F8B6B"
+
+mongodb_package: mongodb-org
+mongodb_daemon_name: "mongod"
 ```
 ## Examples
 ```yml
