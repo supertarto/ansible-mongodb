@@ -4,7 +4,6 @@ mongodb_use_pymongo: true
 mongodb_version: "4.2"
 mongodb_version_lock: true
 
-# Value for Debian
 mongodb_repository: "deb http://repo.mongodb.org/apt/debian {{ ansible_distribution_release }}/mongodb-org/{{ mongodb_version }} main"
 mongodb_apt_keyserver: keyserver.ubuntu.com
 mongodb_apt_key_id: "E162F504A20CDF15827F718D4B7C549A058F8B6B"
