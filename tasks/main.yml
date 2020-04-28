@@ -1,7 +1,4 @@
 ---
-- name: Include OS-specific variables
-  include_vars: "{{ ansible_os_family }}.yml"
-
 - name: Include installation tasks
   include: "setup-{{ ansible_os_family }}.yml"
 
@@ -18,18 +15,48 @@
   when: mongodb_security_authorization == 'enabled'
   no_log: true
 
-- name: Ajout d'un compte admin
-  mongodb_user:
-    database: admin
-    name: "{{ mongo_admin_user }}"
-    password: "{{ mongo_admin_pass }}"
-    update_password: "{{ mongodb_user_update_password }}"
-    roles: "{{ mongo_admin_roles }}"
-    login_port: "{{ mongodb_net_port }}"
-    login_host: "{{ mongodb_login_host|default('localhost') }}"
-    state: present
+- block:
+
+    - name: Use specific conf file with security disabled
+      template:
+        src: mongod_auth_init.conf.j2
+        dest: /etc/mongod.conf
+        backup: true
+        owner: root
+        group: root
+        mode: 0644
+      notify: Restart mongodb
+
+    - name: Flush all handlers
+      meta: flush_handlers
+
+    - name: Ajout d'un compte admin
+      mongodb_user:
+        database: admin
+        name: "{{ mongo_admin_user }}"
+        password: "{{ mongo_admin_pass }}"
+        update_password: "{{ mongodb_user_update_password }}"
+        roles: "{{ mongo_admin_roles }}"
+        login_port: "{{ mongodb_net_port }}"
+        login_host: "{{ mongodb_login_host|default('localhost') }}"
+        state: present
+
+    - name: Back to normal conf file
+      template:
+        src: mongod.conf.j2
+        dest: /etc/mongod.conf
+        backup: true
+        owner: root
+        group: root
+        mode: 0644
+      notify: Restart mongodb
+
+    - name: Flush all handlers
+      meta: flush_handlers
+
   when: ( mongodb_security_authorization == 'enabled'
-          and mongodb_user_admin_check.rc != 0 )
+        and mongodb_user_admin_check.rc != 0 )
+  no_log: true
 
 - name: Create normal users and databases
   mongodb_user:
@@ -38,8 +65,8 @@
     password: "{{ item.password }}"
     update_password: "{{ mongodb_user_update_password }}"
     roles: "{{ item.roles }}"
-    login_user: "{{ mongodb_user_admin_name }}"
-    login_password: "{{ mongodb_user_admin_password }}"
+    login_user: "{{ mongo_admin_user }}"
+    login_password: "{{ mongo_admin_pass }}"
     login_port: "{{ mongodb_net_port }}"
     login_host: "{{ mongodb_login_host|default('localhost') }}"
   with_items:

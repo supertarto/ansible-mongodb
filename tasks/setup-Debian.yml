@@ -1,11 +1,7 @@
 ---
-- name: Determine major version
-  set_fact:
-    mongodb_major_version: "{{ mongodb_version[0:3] }}"
-
 - name: Install Requisites
   package:
-    name: ["python-pip", "ca-certificates", "python-setuptools"]
+    name: ["python3-pip", "ca-certificates", "python3-setuptools"]
     state: present
 
 - name: Install PyMongo from PIP
@@ -16,11 +12,11 @@
 - name: Add APT key
   apt_key:
     keyserver: "{{ mongodb_apt_keyserver }}"
-    id: "{{ mongodb_apt_key_id[mongodb_major_version] }}"
+    id: "{{ mongodb_apt_key_id }}"
 
 - name: Add APT repository for MongoDB
   apt_repository:
-    repo: "{{ mongodb_repository[mongodb_major_version] }}"
+    repo: "{{ mongodb_repository }}"
     filename: mongodb_rep
     state: present
 
@@ -63,3 +59,6 @@
     state: link
   when: ansible_service_mgr == "systemd"
   notify: Reload systemd
+
+- name: Flush handlers
+  meta: flush_handlers
