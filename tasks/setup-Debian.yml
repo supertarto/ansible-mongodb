@@ -12,8 +12,8 @@
 
 - name: Add APT key
   apt_key:
-    keyserver: "{{ mongodb_apt_keyserver }}"
-    id: "{{ mongodb_apt_key_id }}"
+    url: "{{ mongodb_apt_keyserver }}"
+    state: present
 
 - name: Add APT repository for MongoDB
   apt_repository:
