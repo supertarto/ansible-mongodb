@@ -1,5 +1,5 @@
 # Ansible MongoDB
-[![Build Status](https://travis-ci.com/supertarto/ansible-mongodb.svg?branch=master)](https://travis-ci.com/supertarto/ansible-mongodb)
+[![CI](https://github.com/supertarto/ansible-mongodb/workflows/CI/badge.svg?event=push)](https://github.com/supertarto/ansible-mongodb/actions?query=workflow%3ACI)
 
 Install and configure mongodb with Ansible. This role is designed for my small need, it can be improved and don't use everything Mongodb can propose. Tested only with Debian 10 and mongodb 4.2.
 
